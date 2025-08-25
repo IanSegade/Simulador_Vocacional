@@ -44,7 +44,7 @@ async function main() {
   console.log("Voy a hacer un par de preguntas para conocerte y sugerirte trayectorias educativas o laborales en función de tus respuestas.");
   console.log("Escribí 'salir' si querés terminar.\n");
 
-  console.log("🤖 IA:", preguntas[preguntaIndex]);
+  console.log("🤖 IA:", preguntasDefault[preguntaIndex]);
 
   rl.on("line", async (input) => {
     if (input.toLowerCase() === "salir") {
@@ -52,21 +52,21 @@ async function main() {
       return;
     }
 
-    conversationHistory.push({ role: "user", content: input });
+    HistorialConversacion.push({ role: "user", content: input });
 
     preguntaIndex++;
 
-    if (preguntaIndex < preguntas.length) {
-      console.log("🤖 IA:", preguntas[preguntaIndex]);
+    if (preguntaIndex < preguntasDefault.length) {
+      console.log("🤖 IA:", preguntasDefault[preguntaIndex]);
     } else {
       try {
-        conversationHistory.push({
+        HistorialConversacion.push({
           role: "system",
           content: "Con toda la información recolectada sugerile al menos 2 posibles carreras o trayectorias educativas adecuadas para el usuario y justifica el motivo."
         });
 
         const res = await ollamaLLM.chat({
-          messages: conversationHistory,
+          messages: HistorialConversacion,
         });
 
         const respuesta = res?.message?.content || res?.message || "";
